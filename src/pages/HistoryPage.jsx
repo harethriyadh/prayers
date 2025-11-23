@@ -47,7 +47,7 @@ export default function HistoryPage() {
     }
   };
 
-  const days = getPrevious7Days();
+  const days = getPrevious7Days().reverse();
 
   return (
     <div className="history-page">
