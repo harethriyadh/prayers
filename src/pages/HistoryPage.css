@@ -1,0 +1,93 @@
+.today {
+  border: 2px solid var(--primary-color);
+  box-shadow: var(--shadow-lg);
+}
+
+.today-badge {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.day-prayer-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.prayer-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.prayer-status {
+  font-size: 1.4rem;
+}
+
+.day-prayer-item.status-1 {
+  background: var(--success-color);
+  border: 2px solid var(--success-color);
+  color: white;
+}
+
+.day-prayer-item.status-1 .prayer-name {
+  color: white;
+}
+
+.day-prayer-item.status-2 {
+  background: var(--warning-color);
+  border: 2px solid var(--warning-color);
+  color: white;
+}
+
+.day-prayer-item.status-2 .prayer-name {
+  color: white;
+}
+
+.day-prayer-item.status-3 {
+  background: var(--danger-color);
+  border: 2px solid var(--danger-color);
+  color: white;
+}
+
+.day-prayer-item.status-3 .prayer-name {
+  color: white;
+}
+
+.day-prayer-item:not(.status-1):not(.status-2):not(.status-3) {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .today-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.25rem;
+  }
+  
+  .day-prayer-item {
+    gap: 0.25rem;
+  }
+  
+  .prayer-name {
+    font-size: 1rem;
+  }
+  
+  .prayer-status {
+    font-size: 1.2rem;
+  }
+  
+  .day-prayer-item {
+    font-size: 1rem;
+  }
+}
+

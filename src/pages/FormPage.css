@@ -1,0 +1,25 @@
+/* Form page styles are in App.css */
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.modal-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .loading {
+    padding: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .modal-subtitle {
+    font-size: 0.9rem;
+  }
+}
+

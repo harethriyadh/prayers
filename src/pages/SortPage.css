@@ -1,0 +1,25 @@
+.prayer-status-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.day-prayer-item.status-1 .prayer-status-label {
+  color: var(--success-color);
+}
+
+.day-prayer-item.status-2 .prayer-status-label {
+  color: var(--warning-color);
+}
+
+.day-prayer-item.status-3 .prayer-status-label {
+  color: var(--danger-color);
+}
+
+@media (max-width: 768px) {
+  .prayer-status-label {
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+  }
+}
+
