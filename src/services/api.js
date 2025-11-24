@@ -1,87 +1,158 @@
-// API service for prayer data
-// In production, replace with actual API endpoint
+// Prayers API client with fallback to localStorage
+// Uses environment variable VITE_API_URL as the API base (no trailing slash).
+// See project docs for integration details.
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-
-// Store data in localStorage as fallback (for demo purposes)
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 const STORAGE_KEY = 'prayers_data';
 
-// Get all data from storage
+// --- Local storage helpers (fallback) ---
 function getStoredData() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : {};
-}
-
-// Save data to storage
-function saveStoredData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-// Save prayer status
-export async function savePrayerStatus(dateKey, prayerName, status) {
   try {
-    const data = getStoredData();
-    
-    if (!data[dateKey]) {
-      data[dateKey] = {};
-    }
-    
-    data[dateKey][prayerName] = status;
-    saveStoredData(data);
-    
-    // In production, also send to API
-    // await fetch(`${API_BASE_URL}/prayers`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ date: dateKey, prayer: prayerName, status })
-    // });
-    
-    return { success: true };
-  } catch (error) {
-    console.error('Error saving prayer status:', error);
-    return { success: false, error };
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch (err) {
+    console.warn('Failed to parse localStorage data, resetting.', err);
+    localStorage.removeItem(STORAGE_KEY);
+    return {};
   }
 }
 
-// Get prayer data for a specific date
-export async function getPrayerData(dateKey) {
+function saveStoredData(data) {
   try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (err) {
+    console.error('Failed to write to localStorage:', err);
+  }
+}
+
+// --- Network helper ---
+async function safeJsonFetch(url, opts = {}) {
+  const res = await fetch(url, opts);
+  let body = {};
+  try {
+    body = await res.json();
+  } catch (e) {
+    // no-op, body stays as {}
+  }
+
+  if (!res.ok) {
+    const msg = body?.error || res.statusText || 'Request failed';
+    const err = new Error(msg);
+    err.status = res.status;
+    err.body = body;
+    throw err;
+  }
+
+  return body;
+}
+
+// --- API client functions (try network first, fallback to localStorage) ---
+export async function savePrayerStatus(dateKey, prayerName, status) {
+  // Basic client-side validation
+  if (!dateKey || typeof dateKey !== 'string') {
+    return { success: false, error: 'Invalid date' };
+  }
+  if (!prayerName || typeof prayerName !== 'string') {
+    return { success: false, error: 'Invalid prayer name' };
+  }
+  if (![1, 2, 3].includes(status)) {
+    return { success: false, error: 'Invalid status' };
+  }
+
+  // Try API
+  try {
+    const payload = { date: dateKey, prayer: prayerName, status };
+    const res = await safeJsonFetch(`${API_BASE}/prayers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    // Expect { success: true, data: { ... } }
+    return res;
+  } catch (err) {
+    // Fallback to localStorage when network/API unavailable
+    console.warn('Remote save failed, falling back to localStorage:', err.message);
+    try {
+      const data = getStoredData();
+      if (!data[dateKey]) data[dateKey] = {};
+      data[dateKey][prayerName] = status;
+      saveStoredData(data);
+      return { success: true, data: data[dateKey] };
+    } catch (e) {
+      console.error('Fallback save failed:', e);
+      return { success: false, error: e.message || String(e) };
+    }
+  }
+}
+
+export async function getPrayerData(dateKey) {
+  if (!dateKey || typeof dateKey !== 'string') return {};
+
+  try {
+    const res = await safeJsonFetch(`${API_BASE}/prayers/${encodeURIComponent(dateKey)}`);
+    // Expect an object (possibly empty)
+    return res || {};
+  } catch (err) {
+    console.warn('Remote getPrayerData failed, using localStorage:', err.message);
     const data = getStoredData();
     return data[dateKey] || {};
-    
-    // In production, fetch from API
-    // const response = await fetch(`${API_BASE_URL}/prayers/${dateKey}`);
-    // return await response.json();
-  } catch (error) {
-    console.error('Error fetching prayer data:', error);
-    return {};
   }
 }
 
-// Get prayer data for multiple dates
 export async function getPrayerDataForDates(dateKeys) {
+  if (!Array.isArray(dateKeys)) return {};
+
   try {
+    const res = await safeJsonFetch(`${API_BASE}/prayers/batch`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dates: dateKeys })
+    });
+
+    return res || {};
+  } catch (err) {
+    console.warn('Remote batch fetch failed, using localStorage:', err.message);
     const data = getStoredData();
     const result = {};
-    
-    dateKeys.forEach(dateKey => {
-      result[dateKey] = data[dateKey] || {};
+    dateKeys.forEach(k => {
+      result[k] = data[k] || {};
     });
-    
     return result;
-  } catch (error) {
-    console.error('Error fetching prayer data for dates:', error);
-    return {};
   }
 }
 
-// Get all prayer data
 export async function getAllPrayerData() {
   try {
+    const res = await safeJsonFetch(`${API_BASE}/prayers`);
+    return res || {};
+  } catch (err) {
+    console.warn('Remote getAllPrayerData failed, using localStorage:', err.message);
     return getStoredData();
-  } catch (error) {
-    console.error('Error fetching all prayer data:', error);
-    return {};
+  }
+}
+
+// Optional: helpful test/delete endpoint wrapper that may be supported by the server
+export async function deletePrayerDate(dateKey) {
+  if (!dateKey || typeof dateKey !== 'string') return { success: false, error: 'Invalid date' };
+
+  try {
+    const res = await safeJsonFetch(`${API_BASE}/prayers/${encodeURIComponent(dateKey)}`, {
+      method: 'DELETE'
+    });
+    return res;
+  } catch (err) {
+    // Also remove from localStorage if present
+    console.warn('Remote delete failed, removing from localStorage if present:', err.message);
+    try {
+      const data = getStoredData();
+      delete data[dateKey];
+      saveStoredData(data);
+      return { success: true };
+    } catch (e) {
+      console.error('Fallback delete failed:', e);
+      return { success: false, error: e.message || String(e) };
+    }
   }
 }
 

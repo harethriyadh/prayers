@@ -39,12 +39,7 @@ export default function HistoryPage() {
   };
 
   const getStatusLabel = (status) => {
-    switch(status) {
-      case 1: return '✓';
-      case 2: return '⚠';
-      case 3: return '✗';
-      default: return '';
-    }
+    return '';
   };
 
   const days = getPrevious7Days().reverse();
@@ -85,9 +80,6 @@ export default function HistoryPage() {
                             className={`day-prayer-item ${getStatusClass(status)}`}
                           >
                             <div className="prayer-name">{prayer}</div>
-                            <div className="prayer-status">
-                              {getStatusLabel(status)}
-                            </div>
                           </div>
                         );
                       })}

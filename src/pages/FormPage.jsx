@@ -97,7 +97,6 @@ export default function FormPage() {
                     className={`prayer-button ${status ? `status-${status}` : ''}`}
                     onClick={() => handlePrayerClick(prayer)}
                   >
-                    {status && <span className={`status-indicator status-${status}`}></span>}
                     {prayer}
                   </button>
                 );
