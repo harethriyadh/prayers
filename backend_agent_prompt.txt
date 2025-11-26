@@ -16,7 +16,7 @@ High-level goals / acceptance criteria
 
 Repository and integration details the AI must know
 
-- Frontend expects the API base URL to be set in env var `VITE_API_URL`. During dev we will point that to https://prayers-5z59mmjsb-harethriyadhs-projects.vercel.app/api.
+- Frontend expects the API base URL to be set in env var `VITE_API_URL`. During dev we will point that to https://prayers-d.vercel.app/api.
 - Current frontend service file (`src/services/api.js`) contains commented fetch examples and current localStorage fallback. Aim to match these endpoints and payload shapes to allow the frontend to switch to remote API with minimal changes.
 
 Required API endpoints and behavior
@@ -95,7 +95,7 @@ Deliverables checklist (what the AI must produce)
 - `server/README.md` with clear instructions:
   - install: npm install
   - run dev: npm run dev
-  - set VITE_API_URL to https://prayers-5z59mmjsb-harethriyadhs-projects.vercel.app/api and run frontend
+  - set VITE_API_URL to https://prayers-d.vercel.app/api and run frontend
   - run tests: npm test
   - Docker instructions
   - example curl requests for each endpoint
@@ -126,27 +126,27 @@ Developer instructions for the AI implementing this
 2) Create the `server/` folder and initialize package.json.
 3) Implement code using Express + SQLite (preferred). Keep code simple and well-commented.
 4) Add tests (jest + supertest or node-tap) and ensure they run quickly.
-5) Add README with run instructions and curl examples. Include environment variable instructions and an example for wiring the frontend (set VITE_API_URL=https://prayers-5z59mmjsb-harethriyadhs-projects.vercel.app/api).
+5) Add README with run instructions and curl examples. Include environment variable instructions and an example for wiring the frontend (set VITE_API_URL=https://prayers-d.vercel.app/api).
 6) Run tests and a short manual verification: start server, run curl to post a prayer status, then GET by date and GET all.
 7) Commit changes and document any important trade-offs in `server/README.md`.
 
 Example curl snippets to include in README
 
 # Save a prayer status (upsert)
-curl -X POST https://prayers-5z59mmjsb-harethriyadhs-projects.vercel.app/api/prayers \
+curl -X POST https://prayers-d.vercel.app/api/prayers \
   -H "Content-Type: application/json" \
   -d '{"date":"2025-11-24","prayer":"الفجر","status":1}'
 
 # Get a single date
-curl https://prayers-5z59mmjsb-harethriyadhs-projects.vercel.app/api/prayers/2025-11-24
+curl https://prayers-d.vercel.app/api/prayers/2025-11-24
 
 # Get many dates
-curl -X POST https://prayers-5z59mmjsb-harethriyadhs-projects.vercel.app/api/prayers/batch \
+curl -X POST https://prayers-d.vercel.app/api/prayers/batch \
   -H "Content-Type: application/json" \
   -d '{"dates": ["2025-11-24","2025-11-23"]}'
 
 # Get all
-curl https://prayers-5z59mmjsb-harethriyadhs-projects.vercel.app/api/prayers
+curl https://prayers-d.vercel.app/api/prayers
 
 Testing hints
 

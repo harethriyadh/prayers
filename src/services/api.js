@@ -2,7 +2,7 @@
 // Uses environment variable VITE_API_URL as the API base (no trailing slash).
 // See project docs for integration details.
 
-const API_BASE = import.meta.env.VITE_API_URL || 'https://prayers-5z59mmjsb-harethriyadhs-projects.vercel.app/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://prayers-d.vercel.app/api';
 const STORAGE_KEY = 'prayers_data';
 
 // --- Local storage helpers (fallback) ---
