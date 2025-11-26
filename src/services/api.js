@@ -72,7 +72,9 @@ export async function savePrayerStatus(dateKey, prayerName, status) {
     return res;
   } catch (err) {
     // Fallback to localStorage when network/API unavailable
-    console.warn('Remote save failed, falling back to localStorage:', err.message);
+    const errorMsg = `⚠️ Failed to save to API: ${err.message}. Saving to local storage instead.`;
+    console.error(errorMsg);
+    alert(errorMsg);
     try {
       const data = getStoredData();
       if (!data[dateKey]) data[dateKey] = {};
@@ -94,7 +96,10 @@ export async function getPrayerData(dateKey) {
     // Expect an object (possibly empty)
     return res || {};
   } catch (err) {
-    console.warn('Remote getPrayerData failed, using localStorage:', err.message);
+    const errorMsg = `❌ Error fetching prayer data for ${dateKey}: ${err.message}`;
+    console.error(errorMsg);
+    alert(errorMsg);
+    console.warn('Using localStorage as fallback');
     const data = getStoredData();
     return data[dateKey] || {};
   }
@@ -112,7 +117,10 @@ export async function getPrayerDataForDates(dateKeys) {
 
     return res || {};
   } catch (err) {
-    console.warn('Remote batch fetch failed, using localStorage:', err.message);
+    const errorMsg = `❌ Error fetching batch prayer data: ${err.message}`;
+    console.error(errorMsg);
+    alert(errorMsg);
+    console.warn('Using localStorage as fallback');
     const data = getStoredData();
     const result = {};
     dateKeys.forEach(k => {
@@ -127,7 +135,10 @@ export async function getAllPrayerData() {
     const res = await safeJsonFetch(`${API_BASE}/prayers`);
     return res || {};
   } catch (err) {
-    console.warn('Remote getAllPrayerData failed, using localStorage:', err.message);
+    const errorMsg = `❌ Error fetching all prayer data: ${err.message}`;
+    console.error(errorMsg);
+    alert(errorMsg);
+    console.warn('Using localStorage as fallback');
     return getStoredData();
   }
 }
