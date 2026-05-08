@@ -1,6 +1,7 @@
 .today {
-  border: 2px solid var(--primary-color);
+  border-color: var(--primary-color);
   box-shadow: var(--shadow-lg);
+  background: #fff;
 }
 
 .today-badge {
@@ -9,85 +10,57 @@
   padding: 0.25rem 0.75rem;
   background: var(--primary-color);
   color: white;
-  border-radius: var(--radius);
-  font-size: 0.75rem;
-  font-weight: 600;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  vertical-align: middle;
 }
 
 .day-prayer-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  font-size: 1.1rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: transform 0.2s;
 }
 
 .prayer-name {
-  font-weight: 700;
-  color: var(--text-primary);
-  font-size: 1.1rem;
-}
-
-.prayer-status {
-  font-size: 1.4rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: inherit;
 }
 
 .day-prayer-item.status-1 {
   background: var(--success-color);
-  border: 2px solid var(--success-color);
-  color: white;
-}
-
-.day-prayer-item.status-1 .prayer-name {
-  color: white;
+  color: var(--success-text);
 }
 
 .day-prayer-item.status-2 {
   background: var(--warning-color);
-  border: 2px solid var(--warning-color);
-  color: white;
-}
-
-.day-prayer-item.status-2 .prayer-name {
-  color: white;
+  color: var(--warning-text);
 }
 
 .day-prayer-item.status-3 {
   background: var(--danger-color);
-  border: 2px solid var(--danger-color);
-  color: white;
-}
-
-.day-prayer-item.status-3 .prayer-name {
-  color: white;
+  color: var(--danger-text);
 }
 
 .day-prayer-item:not(.status-1):not(.status-2):not(.status-3) {
   background: var(--bg-secondary);
-  border: 2px solid var(--border-color);
-  opacity: 0.7;
+  color: var(--text-secondary);
+  border: 1px dashed var(--border-color);
 }
 
 @media (max-width: 768px) {
-  .today-badge {
-    font-size: 0.7rem;
-    padding: 0.2rem 0.5rem;
-    margin-right: 0.25rem;
-  }
-  
   .day-prayer-item {
-    gap: 0.25rem;
+    padding: 0.6rem;
   }
   
   .prayer-name {
-    font-size: 1rem;
-  }
-  
-  .prayer-status {
-    font-size: 1.2rem;
-  }
-  
-  .day-prayer-item {
-    font-size: 1rem;
+    font-size: 0.85rem;
   }
 }
 

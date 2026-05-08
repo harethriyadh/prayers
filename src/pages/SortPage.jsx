@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAllPrayerData } from '../services/api';
+import { getAllPrayerData, savePrayerStatus } from '../services/api';
 import { getDateKey, getArabicDate } from '../utils/dateUtils';
 import PageNavigation from '../components/PageNavigation';
 import './SortPage.css';
@@ -16,6 +16,7 @@ export default function SortPage() {
   const [allData, setAllData] = useState({});
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [confirmModal, setConfirmModal] = useState(null); // { dateKey, prayer }
 
   useEffect(() => {
     loadAllData();
@@ -26,6 +27,30 @@ export default function SortPage() {
     const data = await getAllPrayerData();
     setAllData(data);
     setLoading(false);
+  };
+
+  const handleMarkAsQadaa = async (dateKey, prayer) => {
+    // Optimistic update
+    setAllData(prev => ({
+      ...prev,
+      [dateKey]: {
+        ...prev[dateKey],
+        [prayer]: 2
+      }
+    }));
+
+    try {
+      const result = await savePrayerStatus(dateKey, prayer, 2);
+      if (!result.success) {
+        // If it failed and we didn't get a success response, we might want to reload
+        // But the service handles fallbacks to localStorage, so it's usually fine
+        console.error('Failed to save status:', result.error);
+      }
+    } catch (err) {
+      console.error('Error marking as Qadaa:', err);
+      // Reload data to sync if error occurs
+      loadAllData();
+    }
   };
 
   const handleStatusFilter = (status) => {
@@ -65,6 +90,20 @@ export default function SortPage() {
     return `status-${status}`;
   };
 
+  const getCounts = () => {
+    const counts = { 1: 0, 2: 0, 3: 0, total: 0 };
+    Object.values(allData).forEach(dayData => {
+      Object.values(dayData).forEach(status => {
+        if (counts[status] !== undefined) {
+          counts[status]++;
+          counts.total++;
+        }
+      });
+    });
+    return counts;
+  };
+
+  const counts = getCounts();
   const filteredData = getFilteredData();
   const sortedDates = Object.keys(filteredData).sort().reverse(); // Most recent first
 
@@ -72,38 +111,35 @@ export default function SortPage() {
     <div className="sort-page">
       <div className="container">
         <PageNavigation />
-        <div className="page-header">
+        <div className="page-header centered-compact">
           <h1 className="page-title">تصنيف الصلوات</h1>
-          <p className="page-subtitle">عرض الصلوات حسب الحالة</p>
+          <p className="page-subtitle light">عرض الصلوات حسب الحالة</p>
         </div>
 
-        <div className="sort-controls">
+        <div className="sort-segmented-control">
           <button
-            className={`sort-button status-1 ${selectedStatus === 1 ? 'active' : ''}`}
+            className={`sort-pill ${selectedStatus === null ? 'active' : ''}`}
+            onClick={() => setSelectedStatus(null)}
+          >
+            الكل <span className="count-badge">{counts.total}</span>
+          </button>
+          <button
+            className={`sort-pill status-1 ${selectedStatus === 1 ? 'active' : ''}`}
             onClick={() => handleStatusFilter(1)}
           >
-            <span className="sort-color-dot status-1"></span>
-            أديت الصلاة
+            أديت <span className="count-badge">{counts[1]}</span>
           </button>
           <button
-            className={`sort-button status-2 ${selectedStatus === 2 ? 'active' : ''}`}
+            className={`sort-pill status-2 ${selectedStatus === 2 ? 'active' : ''}`}
             onClick={() => handleStatusFilter(2)}
           >
-            <span className="sort-color-dot status-2"></span>
-            قضاء
+            قضاء <span className="count-badge">{counts[2]}</span>
           </button>
           <button
-            className={`sort-button status-3 ${selectedStatus === 3 ? 'active' : ''}`}
+            className={`sort-pill status-3 ${selectedStatus === 3 ? 'active' : ''}`}
             onClick={() => handleStatusFilter(3)}
           >
-            <span className="sort-color-dot status-3"></span>
-            لم أصل
-          </button>
-          <button
-            className={`sort-button ${selectedStatus === null ? 'active' : ''}`}
-            onClick={() => handleStatusFilter(null)}
-          >
-            الكل
+            لم أصل <span className="count-badge">{counts[3]}</span>
           </button>
         </div>
 
@@ -140,12 +176,19 @@ export default function SortPage() {
                       return (
                         <div 
                           key={prayer} 
-                          className={`day-prayer-item ${getStatusClass(status)}`}
+                          className={`day-prayer-item ${getStatusClass(status)} ${status === 3 ? 'is-editable' : ''}`}
+                          onClick={() => {
+                            if (status === 3) {
+                              setConfirmModal({ dateKey, prayer });
+                            }
+                          }}
+                          title={status === 3 ? 'اضغط للتحويل إلى قضاء' : ''}
                         >
                           <div className="prayer-name">{prayer}</div>
-                          <div className="prayer-status-label">
-                            {getStatusLabel(status)}
-                          </div>
+                          {status === 1 && <span className="status-icon-mini">✓</span>}
+                          {status === 2 && <span className="status-icon-mini">⏳</span>}
+                          {status === 3 && <span className="status-icon-mini">✕</span>}
+                          {status === 3 && <div className="edit-hint">اضغط للتحويل لقضاء</div>}
                         </div>
                       );
                     })}
@@ -156,6 +199,38 @@ export default function SortPage() {
           </div>
         )}
       </div>
+
+      {confirmModal && (
+        <div className="modal-overlay" onClick={() => setConfirmModal(null)}>
+          <div className="modal-content high-fidelity" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setConfirmModal(null)}>×</button>
+            <div className="modal-header">
+              <h2 className="modal-title">{confirmModal.prayer}</h2>
+              <p className="modal-status">قضاء</p>
+            </div>
+            <div className="modal-body">
+              <p>هل أنت متأكد من تحويل هذه الصلاة ليوم <br/> <strong>{getArabicDate(new Date(confirmModal.dateKey + 'T00:00:00'))}</strong>؟</p>
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="btn-confirm-gradient" 
+                onClick={() => {
+                  handleMarkAsQadaa(confirmModal.dateKey, confirmModal.prayer);
+                  setConfirmModal(null);
+                }}
+              >
+                تأكيد
+              </button>
+              <button 
+                className="btn-cancel-flat" 
+                onClick={() => setConfirmModal(null)}
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

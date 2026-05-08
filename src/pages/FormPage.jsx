@@ -97,7 +97,10 @@ export default function FormPage() {
                     className={`prayer-button ${status ? `status-${status}` : ''}`}
                     onClick={() => handlePrayerClick(prayer)}
                   >
-                    {prayer}
+                    <span className="prayer-label">{prayer}</span>
+                    {status === 1 && <span className="status-icon">✓</span>}
+                    {status === 2 && <span className="status-icon">⏳</span>}
+                    {status === 3 && <span className="status-icon">✕</span>}
                   </button>
                 );
               })}
@@ -107,49 +110,30 @@ export default function FormPage() {
 
         {selectedPrayer && (
           <div className="modal-overlay" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content premium-modal" onClick={(e) => e.stopPropagation()}>
               <button className="modal-close" onClick={closeModal}>×</button>
-              <div className="modal-header">
-                <h2 className="modal-title">اختر حالة الصلاة</h2>
-                <p className="modal-subtitle">{selectedPrayer}</p>
+              <div className="modal-header centered">
+                <h2 className="modal-title primary">اختر حالة الصلاة</h2>
+                <p className="modal-subtitle grey">{selectedPrayer}</p>
               </div>
-              <div className="status-options">
-                <div 
-                  className="status-option status-1"
-                  onClick={() => handleStatusSelect(1)}
-                >
-                  <span className="status-color-dot status-1"></span>
-                  <input 
-                    type="checkbox" 
-                    checked={getPrayerStatus(selectedPrayer) === 1}
-                    readOnly
-                  />
-                  <label>أديت</label>
-                </div>
-                <div 
-                  className="status-option status-2"
-                  onClick={() => handleStatusSelect(2)}
-                >
-                  <span className="status-color-dot status-2"></span>
-                  <input 
-                    type="checkbox" 
-                    checked={getPrayerStatus(selectedPrayer) === 2}
-                    readOnly
-                  />
-                  <label>قضاء</label>
-                </div>
-                <div 
-                  className="status-option status-3"
-                  onClick={() => handleStatusSelect(3)}
-                >
-                  <span className="status-color-dot status-3"></span>
-                  <input 
-                    type="checkbox" 
-                    checked={getPrayerStatus(selectedPrayer) === 3}
-                    readOnly
-                  />
-                  <label>لم أصل</label>
-                </div>
+              <div className="status-options centered-list">
+                {[
+                  { id: 1, label: 'أديت', class: 'status-1' },
+                  { id: 2, label: 'قضاء', class: 'status-2' },
+                  { id: 3, label: 'لم أصل', class: 'status-3' }
+                ].map((option) => {
+                  const isActive = getPrayerStatus(selectedPrayer) === option.id;
+                  return (
+                    <div 
+                      key={option.id}
+                      className={`status-pill ${isActive ? 'active' : ''}`}
+                      onClick={() => handleStatusSelect(option.id)}
+                    >
+                      <span className="pill-label">{option.label}</span>
+                      {isActive && <span className="pill-check">✓</span>}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

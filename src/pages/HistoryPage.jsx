@@ -80,6 +80,9 @@ export default function HistoryPage() {
                             className={`day-prayer-item ${getStatusClass(status)}`}
                           >
                             <div className="prayer-name">{prayer}</div>
+                            {status === 1 && <span className="status-icon-mini">✓</span>}
+                            {status === 2 && <span className="status-icon-mini">⏳</span>}
+                            {status === 3 && <span className="status-icon-mini">✕</span>}
                           </div>
                         );
                       })}

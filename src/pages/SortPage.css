@@ -1,25 +1,113 @@
-.prayer-status-label {
-  font-size: 0.85rem;
-  font-weight: 600;
+/* SortPage Refined Styles */
+.sort-page {
+  padding-bottom: 2rem;
+}
+
+.day-prayer-item.is-editable {
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.day-prayer-item.is-editable:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.day-prayer-item.is-editable:active {
+  transform: scale(0.97);
+}
+
+.edit-hint {
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 4px;
+  color: var(--danger-text);
+  opacity: 0.8;
+}
+
+/* Modal Customizations for SortPage */
+.modal-content.high-fidelity {
+  background: var(--bg-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  border: none;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.modal-status {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--danger-text);
   margin-top: 0.25rem;
+  background: var(--danger-color);
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  border-radius: 100px;
 }
 
-.day-prayer-item.status-1 .prayer-status-label {
-  color: var(--success-color);
+.modal-body p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 1.5rem 0 2.5rem;
 }
 
-.day-prayer-item.status-2 .prayer-status-label {
-  color: var(--warning-color);
+.modal-body strong {
+  color: var(--text-primary);
+  font-weight: 800;
 }
 
-.day-prayer-item.status-3 .prayer-status-label {
-  color: var(--danger-color);
+.btn-confirm-gradient {
+  background: linear-gradient(135deg, #ef4444, #f87171); /* Soft Coral Gradient */
+  border: none;
+  padding: 1.1rem;
+  border-radius: var(--radius);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.btn-confirm-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+}
+
+.btn-confirm-gradient:active {
+  transform: scale(0.98);
+}
+
+.btn-cancel-flat {
+  background: transparent;
+  border: none;
+  padding: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.btn-cancel-flat:hover {
+  color: var(--text-primary);
 }
 
 @media (max-width: 768px) {
-  .prayer-status-label {
-    font-size: 0.75rem;
-    margin-top: 0.2rem;
+  .day-prayer-item {
+    padding: 0.75rem;
   }
 }
+
+
 
