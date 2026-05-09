@@ -71,20 +71,10 @@ export async function savePrayerStatus(dateKey, prayerName, status) {
     // Expect { success: true, data: { ... } }
     return res;
   } catch (err) {
-    // Fallback to localStorage when network/API unavailable
-    const errorMsg = `⚠️ Failed to save to API: ${err.message}. Saving to local storage instead.`;
+    const errorMsg = `⚠️ Failed to save to API: ${err.message}.`;
     console.error(errorMsg);
-    alert(errorMsg);
-    try {
-      const data = getStoredData();
-      if (!data[dateKey]) data[dateKey] = {};
-      data[dateKey][prayerName] = status;
-      saveStoredData(data);
-      return { success: true, data: data[dateKey] };
-    } catch (e) {
-      console.error('Fallback save failed:', e);
-      return { success: false, error: e.message || String(e) };
-    }
+    // Return failure instead of falling back to localStorage
+    return { success: false, error: err.message };
   }
 }
 
@@ -98,10 +88,8 @@ export async function getPrayerData(dateKey) {
   } catch (err) {
     const errorMsg = `❌ Error fetching prayer data for ${dateKey}: ${err.message}`;
     console.error(errorMsg);
-    alert(errorMsg);
-    console.warn('Using localStorage as fallback');
-    const data = getStoredData();
-    return data[dateKey] || {};
+    // Return empty object on failure to ensure no "ghost" data is shown
+    return {};
   }
 }
 
@@ -119,13 +107,9 @@ export async function getPrayerDataForDates(dateKeys) {
   } catch (err) {
     const errorMsg = `❌ Error fetching batch prayer data: ${err.message}`;
     console.error(errorMsg);
-    alert(errorMsg);
-    console.warn('Using localStorage as fallback');
-    const data = getStoredData();
+    // Return empty mapping on failure
     const result = {};
-    dateKeys.forEach(k => {
-      result[k] = data[k] || {};
-    });
+    dateKeys.forEach(k => { result[k] = {}; });
     return result;
   }
 }
@@ -137,9 +121,8 @@ export async function getAllPrayerData() {
   } catch (err) {
     const errorMsg = `❌ Error fetching all prayer data: ${err.message}`;
     console.error(errorMsg);
-    alert(errorMsg);
-    console.warn('Using localStorage as fallback');
-    return getStoredData();
+    // Return empty object on failure
+    return {};
   }
 }
 

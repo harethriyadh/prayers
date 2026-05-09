@@ -379,7 +379,11 @@
 
 .sort-pill.active.status-1 { background: #10B981; } /* Emerald */
 .sort-pill.active.status-2 { background: #F59E0B; } /* Amber */
-.sort-pill.active.status-3 { background: #EF4444; } /* Coral/Red */
+.sort-pill.active.status-3 { background: #F43F5E; } /* Red */
+
+.status-indicator.status-1 { background: #10B981; }
+.status-indicator.status-2 { background: #F59E0B; }
+.status-indicator.status-3 { background: #F43F5E; }
 
 .count-badge {
   background: rgba(0, 0, 0, 0.05);

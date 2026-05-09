@@ -11,10 +11,10 @@
   /* Modern Minimalist Muted Palette */
   --success-color: #ecfdf5; /* Soft Emerald bg */
   --success-text: #059669; /* Emerald text */
-  --warning-color: #fffbeb; /* Warm Sand bg (Soft Yellow/Amber) */
+  --warning-color: #fffbeb; /* Warm Sand bg */
   --warning-text: #d97706; /* Warm Sand text */
-  --danger-color: #f8fafc; /* Light Grey (for Not Done) */
-  --danger-text: #64748b; /* Slate text */
+  --danger-color: #fef2f2; /* Light Red bg (for Not Done) */
+  --danger-text: #ef4444; /* Red text */
   
   --bg-color: #ffffff;
   --bg-secondary: #fcfcfc;
