@@ -21,7 +21,7 @@
   --bg-secondary: #f1f5f9; /* Slate-100: Clearly distinct from white cards */
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --border-color: #d1d5db; /* More visible border */
+  --border-color: #94a3b8; /* Darker, more visible border */
   
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);

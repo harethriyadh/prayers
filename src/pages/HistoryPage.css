@@ -25,7 +25,7 @@
   padding: 0.85rem;
   border-radius: var(--radius-sm);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--border-color);
   background: var(--bg-secondary);
 }
 
@@ -58,7 +58,7 @@
 .day-prayer-item:not(.status-1):not(.status-2):not(.status-3) {
   background: var(--bg-secondary);
   color: var(--text-secondary);
-  border: 1.5px solid var(--border-color);
+  border: 2px solid var(--border-color);
   opacity: 0.6;
 }
 
