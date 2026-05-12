@@ -5,9 +5,10 @@
 
 /* Top Navigation Bar */
 .nav {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
   position: fixed;
   top: 0;
   left: 0;
@@ -75,6 +76,7 @@
   font-weight: 800;
   color: var(--text-primary);
   text-align: center;
+  border: 1px solid var(--border-color);
   box-shadow: var(--shadow);
 }
 
@@ -100,16 +102,7 @@
 
 .prayer-button {
   background: var(--bg-color);
-  border: none;
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  min-height: 64px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-align: center;
-  font-weight: 700;
-  font-size: 1.3rem;
-  color: var(--text-primary);
+  border: 1.5px solid var(--border-color);
   box-shadow: var(--shadow);
   display: flex;
   align-items: center;
@@ -213,6 +206,7 @@
   justify-content: center;
   padding: 1.25rem 1.5rem;
   background: var(--bg-secondary);
+  border: 1.5px solid var(--border-color);
   border-radius: 100px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -265,13 +259,18 @@
   background: var(--bg-color);
   border-radius: var(--radius);
   padding: 1.5rem;
+  border: 1.5px solid var(--border-color);
   box-shadow: var(--shadow);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure cards in grid have same height */
 }
 
 .day-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
 }
 
 .day-header {
@@ -293,6 +292,9 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
+  justify-items: stretch;
+  align-items: stretch;
+  justify-content: start;
 }
 
 .day-prayer-item {
@@ -306,14 +308,27 @@
   font-size: 0.85rem;
   font-weight: 700;
   background: var(--bg-secondary);
+  border: 1.5px solid var(--border-color);
+  transition: all 0.2s ease;
+  min-height: 100px; /* Increased to accommodate text better */
+  width: 100%;
+}
+
+.day-prayer-item:hover {
+  border-color: var(--primary-color);
+  background: var(--bg-color);
 }
 
 .day-prayer-item.status-1 { background: var(--success-color); color: var(--success-text); }
 .day-prayer-item.status-2 { background: var(--warning-color); color: var(--warning-text); }
 .day-prayer-item.status-3 { background: var(--danger-color); color: var(--danger-text); }
 
+.day-prayer-item:not(.status-1):not(.status-2):not(.status-3) {
+  opacity: 0.6;
+}
+
 .status-icon-mini {
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 @media (max-width: 768px) {
@@ -338,16 +353,13 @@
   background: var(--bg-color);
   padding: 6px;
   border-radius: 100px;
+  border: 1.5px solid var(--border-color);
   box-shadow: var(--shadow);
-  display: inline-flex;
+  display: flex; /* Changed to flex */
   gap: 4px;
   margin: 0 auto 2.5rem;
-  width: auto;
-  min-width: fit-content;
+  width: max-content; /* Only take space needed */
   max-width: 100%;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .sort-pill {
@@ -397,17 +409,15 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-@media (max-width: 768px) {
-  .sort-segmented-control {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    border-radius: 20px;
-    padding: 8px;
-    width: calc(100% - 2rem);
-    left: 0;
-    transform: none;
-    margin: 0 1rem 1.5rem;
-  }
+  @media (max-width: 768px) {
+    .sort-segmented-control {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-radius: 20px;
+      padding: 8px;
+      width: calc(100% - 2rem);
+      margin: 0 auto 1.5rem;
+    }
   
   .sort-pill {
     justify-content: center;
@@ -415,20 +425,7 @@
   }
 }
 
-/* Day Card Refinement */
-.day-card {
-  background: var(--bg-color);
-  border-radius: var(--radius);
-  padding: 24px; /* Hug content with consistent padding */
-  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.04); /* Soft blurry shadow */
-  border: none;
-  transition: all 0.3s ease;
-}
 
-.day-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
-}
 
 .modal-close {
   position: absolute;

@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Tajawal', sans-serif !important;
 }
 
 :root {
@@ -17,14 +18,14 @@
   --danger-text: #ef4444; /* Red text */
   
   --bg-color: #ffffff;
-  --bg-secondary: #fcfcfc;
+  --bg-secondary: #f1f5f9; /* Slate-100: Clearly distinct from white cards */
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --border-color: #f1f5f9;
+  --border-color: #d1d5db; /* More visible border */
   
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); /* Extremely subtle */
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   
   --radius-sm: 10px;
   --radius: 16px;
@@ -32,7 +33,7 @@
 }
 
 body {
-  font-family: 'Tajawal', 'Cairo', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-secondary);

@@ -5,13 +5,23 @@
 
 .day-prayer-item.is-editable {
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-color);
 }
 
 .day-prayer-item.is-editable:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  border-color: var(--primary-color);
   box-shadow: var(--shadow);
+}
+
+.day-prayer-item.is-editable {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  text-align: center;
 }
 
 .day-prayer-item.is-editable:active {
@@ -19,11 +29,12 @@
 }
 
 .edit-hint {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  margin-top: 4px;
+  margin-top: auto; /* Push to bottom */
   color: var(--danger-text);
   opacity: 0.8;
+  line-height: 1.2;
 }
 
 /* Modal Customizations for SortPage */

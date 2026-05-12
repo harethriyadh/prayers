@@ -3,27 +3,6 @@
 // See project docs for integration details.
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://prayers-d.onrender.com/api';
-const STORAGE_KEY = 'prayers_data';
-
-// --- Local storage helpers (fallback) ---
-function getStoredData() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : {};
-  } catch (err) {
-    console.warn('Failed to parse localStorage data, resetting.', err);
-    localStorage.removeItem(STORAGE_KEY);
-    return {};
-  }
-}
-
-function saveStoredData(data) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch (err) {
-    console.error('Failed to write to localStorage:', err);
-  }
-}
 
 // --- Network helper ---
 async function safeJsonFetch(url, opts = {}) {
@@ -136,17 +115,8 @@ export async function deletePrayerDate(dateKey) {
     });
     return res;
   } catch (err) {
-    // Also remove from localStorage if present
-    console.warn('Remote delete failed, removing from localStorage if present:', err.message);
-    try {
-      const data = getStoredData();
-      delete data[dateKey];
-      saveStoredData(data);
-      return { success: true };
-    } catch (e) {
-      console.error('Fallback delete failed:', e);
-      return { success: false, error: e.message || String(e) };
-    }
+    console.error('Remote delete failed:', err.message);
+    return { success: false, error: err.message };
   }
 }
 

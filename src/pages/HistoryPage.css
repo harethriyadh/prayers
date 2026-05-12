@@ -1,7 +1,7 @@
 .today {
-  border-color: var(--primary-color);
-  box-shadow: var(--shadow-lg);
-  background: #fff;
+  border: 2px solid var(--primary-color) !important;
+  box-shadow: var(--shadow-lg) !important;
+  background: var(--bg-color);
 }
 
 .today-badge {
@@ -21,10 +21,17 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.75rem;
+  gap: 0.4rem;
+  padding: 0.85rem;
   border-radius: var(--radius-sm);
-  transition: transform 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.day-prayer-item:hover {
+  transform: scale(1.05);
+  z-index: 1;
 }
 
 .prayer-name {
@@ -51,7 +58,8 @@
 .day-prayer-item:not(.status-1):not(.status-2):not(.status-3) {
   background: var(--bg-secondary);
   color: var(--text-secondary);
-  border: 1px dashed var(--border-color);
+  border: 1.5px solid var(--border-color);
+  opacity: 0.6;
 }
 
 @media (max-width: 768px) {
