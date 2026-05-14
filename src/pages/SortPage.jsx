@@ -176,19 +176,19 @@ export default function SortPage() {
                       return (
                         <div 
                           key={prayer} 
-                          className={`day-prayer-item ${getStatusClass(status)} ${status === 3 ? 'is-editable' : ''}`}
+                          className={`day-prayer-item ${getStatusClass(status)} ${(status === 3 || status === 0 || !status) ? 'is-editable' : ''}`}
                           onClick={() => {
-                            if (status === 3) {
+                            if (status === 3 || status === 0 || !status) {
                               setConfirmModal({ dateKey, prayer });
                             }
                           }}
-                          title={status === 3 ? 'اضغط للتحويل إلى قضاء' : ''}
+                          title={(status === 3 || status === 0 || !status) ? 'اضغط للتحويل إلى قضاء' : ''}
                         >
                           <div className="prayer-name">{prayer}</div>
                           {status === 1 && <span className="status-icon-mini">✓</span>}
                           {status === 2 && <span className="status-icon-mini">⏳</span>}
                           {status === 3 && <span className="status-icon-mini">✕</span>}
-                          {status === 3 && <div className="edit-hint">اضغط للتحويل لقضاء</div>}
+                          {(status === 3 || status === 0 || !status) && <div className="edit-hint">اضغط للتحويل لقضاء</div>}
                         </div>
                       );
                     })}
