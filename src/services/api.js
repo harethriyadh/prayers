@@ -34,7 +34,7 @@ export async function savePrayerStatus(dateKey, prayerName, status) {
   if (!prayerName || typeof prayerName !== 'string') {
     return { success: false, error: 'Invalid prayer name' };
   }
-  if (![1, 2, 3].includes(status)) {
+  if (![0, 1, 2, 3].includes(status)) {
     return { success: false, error: 'Invalid status' };
   }
 

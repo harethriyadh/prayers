@@ -120,7 +120,8 @@ export default function FormPage() {
                 {[
                   { id: 1, label: 'أديت', class: 'status-1' },
                   { id: 2, label: 'قضاء', class: 'status-2' },
-                  { id: 3, label: 'لم أصل', class: 'status-3' }
+                  { id: 3, label: 'لم أصل', class: 'status-3' },
+                  { id: 0, label: 'بدون حالة', class: 'status-0' }
                 ].map((option) => {
                   const isActive = getPrayerStatus(selectedPrayer) === option.id;
                   return (
